@@ -4,10 +4,10 @@ ARG OPENCODE_VERSION
 #RUN npm install -g @opencode/cli --force
 
 USER agent
-# ENV OPENCODE_CONFIG_DIR=/home/agent/.config/opencode
-# RUN npm uninstall -g opencode-ai \
-#     && npm install -g "@opencode/cli@${OPENCODE_VERSION}" \
-#     && npm cache clean --force \
-#     && opencode --version
+ENV OPENCODE_CONFIG_DIR=/home/agent/.config/opencode
+RUN npm uninstall -g opencode-ai \
+    && npm install -g "@opencode/cli@${OPENCODE_VERSION}" \
+    && npm cache clean --force \
+    && opencode --version
 #ENTRYPOINT []
 # CMD ["opencode"]

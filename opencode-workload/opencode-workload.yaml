@@ -4,7 +4,7 @@ kind: workload
 
 args:
   version:
-    default: "2.0.22"
+    default: "2.0.24"
     pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
     buildArg: OPENCODE_VERSION  
 provides: ["opencode@${{ kit.args.version }}"]
@@ -44,6 +44,9 @@ capabilities:
     config:
       install:
         - command: |
-            opencode mcp add mcpgw --url http://mcp-gateway.docker.internal/mcp --header "Authorization=Bearer proxy-managed" \
-            && jq '. + {enabled_providers: ["opencode-go"]}' /home/agent/.config/opencode/opencode.json  > tmp.json && mv tmp.json /home/agent/.config/opencode/opencode.json 
-          user: "1000"
+            set -e
+            opencode mcp add mcpgw --url $MCP_GATEWAY_URL --header "Authorization=Bearer proxy-managed" --global
+            f="$(opencode debug config| jq -r '.[]|select(.type=="directory").path')/limit-providers.json"
+            echo '{"enabled_providers": ["opencode-go"]}' > "$f"
+          env: [MCP_GATEWAY_URL]
+          user: agent
