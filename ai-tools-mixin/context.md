@@ -13,7 +13,7 @@ the Model Context Protocol.
 - **How to use**: Serena runs as an MCP server. Configure your agent to
   connect to it.
 - **Initialization**: Already initialized with `serena init` during build.
-- **Do to use**: If working with files outside of the project or non code files. 
+- **Do to use**: If working with files outside of the project or non code files.
 
 ## Archify
 

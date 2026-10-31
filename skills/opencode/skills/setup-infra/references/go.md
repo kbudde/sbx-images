@@ -45,4 +45,3 @@ run = "go test ./... -race"
 - `gosec` also runs as a golangci-lint linter (enabled above).
 - `govulncheck` is reachability-aware.
 - Respect `go.mod` `toolchain` directive for version pinning.
-```

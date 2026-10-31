@@ -4,7 +4,7 @@ Enable mise monorepo mode when more than one language is detected.
 
 ## Layout
 
-```
+```text
 repo/
   mise.toml                 # monorepo_root, shared runtimes, aggregate tasks
   services/api/             # Go: go.mod, .golangci.yml
@@ -48,4 +48,3 @@ Subdirectory `mise.toml` files hold language-specific tools and tasks (see `go.m
 - Go: `gosec`, `govulncheck`
 - Rust: `cargo-deny`, `cargo-audit`
 - TS: `eslint-plugin-security`, `npm audit`
-```

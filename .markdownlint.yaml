@@ -1,0 +1,10 @@
+# markdownlint rules for this repository.
+#
+# prettier is the formatter of record (see .prettierrc.json: proseWrap is
+# preserve), so line length is deliberately not enforced here — re-wrapping by
+# hand would fight it.
+MD013: false
+
+# Agent-facing skills start with YAML front matter and are consumed by models,
+# not rendered as project documentation, so they carry no H1.
+MD041: false

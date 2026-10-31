@@ -1,0 +1,188 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  REGISTRY: ${{ vars.REGISTRY || 'docker.io' }}
+  IMAGE_NAMESPACE: ${{ vars.IMAGE_NAMESPACE || 'kbudde' }}
+  PLATFORMS: ${{ vars.PLATFORMS || 'linux/amd64,linux/arm64' }}
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  security:
+    permissions:
+      contents: read
+      security-events: write
+    uses: ./.github/workflows/security.yml
+
+  detect-changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      kits: ${{ steps.collect.outputs.kits }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Discover kits
+        id: discover
+        run: |
+          set -euo pipefail
+          kits=$(scripts/discover-kits.sh | tr '\n' ' ')
+          kits="${kits% }"
+          echo "Discovered kits: ${kits:-(none)}"
+          echo "kits=${kits}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate filters
+        id: filter-setup
+        run: |
+          set -euo pipefail
+          {
+            echo "filters<<EOF"
+            for kit in ${{ steps.discover.outputs.kits }}; do
+              echo "$kit: \"$kit/**\""
+            done
+            echo "shared:"
+            echo "  - \".github/workflows/**\""
+            echo "  - \"scripts/**\""
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Resolve filter base
+        id: filter-base
+        run: |
+          set -euo pipefail
+          base=""
+          if [ "${{ github.event_name }}" = "pull_request" ] \
+             && git rev-parse --verify --quiet HEAD^2 >/dev/null; then
+            base=$(git rev-parse HEAD^1)
+          fi
+          echo "Filter base: ${base:-(action default)}"
+          echo "sha=${base}" >> "$GITHUB_OUTPUT"
+
+      - name: Filter changes
+        id: filter
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          filters: ${{ steps.filter-setup.outputs.filters }}
+          token: ""
+          base: ${{ steps.filter-base.outputs.sha }}
+
+      - name: Collect kits to build
+        id: collect
+        run: |
+          set -euo pipefail
+          all=$(printf '%s\n' ${{ steps.discover.outputs.kits }} | jq -R . | jq -sc .)
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            kits="${all}"
+          elif [ "${{ steps.filter.outputs.shared }}" = "true" ]; then
+            kits="${all}"
+          else
+            kits=$(echo '${{ steps.filter.outputs.changes }}' | jq -c 'map(select(. != "shared"))')
+          fi
+          echo "kits=${kits:-[]}" >> "$GITHUB_OUTPUT"
+          echo "Building: ${kits}"
+
+  build:
+    needs: [lint, security, detect-changes]
+    if: >-
+      needs.detect-changes.outputs.kits != '[]' &&
+      needs.detect-changes.outputs.kits != 'null' &&
+      needs.detect-changes.outputs.kits != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        kit: ${{ fromJson(needs.detect-changes.outputs.kits) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+        with:
+          driver: docker-container
+
+      - name: Setup toolchain
+        uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
+        with:
+          install_args: git-cliff
+
+      - name: Resolve version
+        id: version
+        env:
+          KIT: ${{ matrix.kit }}
+          RELEASE_NOTES_FILE: ${{ runner.temp }}/release-notes-${{ matrix.kit }}.md
+        run: mise run build:version
+
+      - name: Create and push tag
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.version.outputs.bump == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.version.outputs.tag }}" -m "Release ${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.new }}"
+
+      - name: Log in to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build (PR verify, cache only)
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          docker buildx build ${{ matrix.kit }} -f ${{ matrix.kit }}/${{ matrix.kit }}.yaml --platform ${{ env.PLATFORMS }} --provenance=mode=min --output type=cacheonly
+
+      - name: Build and push
+        if: github.event_name != 'pull_request' && (github.event_name != 'push' || steps.version.outputs.bump == 'true')
+        run: |
+          set -euo pipefail
+          docker buildx build ${{ matrix.kit }} -f ${{ matrix.kit }}/${{ matrix.kit }}.yaml --platform ${{ env.PLATFORMS }} --provenance=mode=min --push -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/kit-${{ matrix.kit }}:v${{ steps.version.outputs.version }}
+
+      - name: Trivy image scan
+        if: github.event_name != 'pull_request' && (github.event_name != 'push' || steps.version.outputs.bump == 'true')
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/kit-${{ matrix.kit }}:v${{ steps.version.outputs.version }}
+        run: mise run docker:scan
+
+      - name: Generate SBOM
+        if: github.event_name != 'pull_request' && (github.event_name != 'push' || steps.version.outputs.bump == 'true')
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/kit-${{ matrix.kit }}:v${{ steps.version.outputs.version }}
+          SBOM_FILE: ${{ matrix.kit }}-sbom.spdx.json
+        run: mise run docker:sbom
+
+      - name: Upload SBOM artifact
+        if: github.event_name != 'pull_request' && (github.event_name != 'push' || steps.version.outputs.bump == 'true')
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ matrix.kit }}-sbom
+          path: ${{ matrix.kit }}-sbom.spdx.json

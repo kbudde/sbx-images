@@ -1,0 +1,18 @@
+# SkillSpector baseline — findings listed here are suppressed on future scans.
+# Edit 'reason' fields and add glob 'rules' as needed. See docs/SUPPRESSION.md.
+#
+# Regenerate a fingerprint with:
+#   mise exec -- skillspector baseline <skill-path> --no-llm -o /tmp/b.yaml
+# then merge its `fingerprints` entries here and review the reasons.
+version: 2
+scanner_version: "2.13.3"
+rules: []
+fingerprints:
+  - hash: sha256:ecf3ae0e2daa14ff0ba5aa064c68b126c72aec745fb181171bea9eabeeb22963
+    rule_id: EA2
+    file: grilling.md
+    reason: "Known false positive: benign agent-autonomy wording, no destructive action"
+  - hash: sha256:9fea359744608dd5814777d67bb0b279eec565f018b6803ef999c585ee200481
+    rule_id: EA2
+    file: references/typescript.md
+    reason: "Known false positive: benign agent-autonomy wording, no destructive action"

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices"],
+  "rangeStrategy": "pin",
+  "minimumReleaseAge": "3 days",
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 2,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true
+  },
+  "mise": {
+    "updatePinnedDependencies": false
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "opencode version in kit yaml",
+      "managerFilePatterns": ["opencode2/opencode2.yaml"],
+      "matchStrings": [
+        "default:\\s*\"(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)\"\\s*\\n\\s*pattern:[^\\n]*\\n\\s*buildArg:\\s*OPENCODE_VERSION"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "anomalyco/opencode"
+    },
+    {
+      "customType": "regex",
+      "description": "Go toolchain version in kit yaml",
+      "managerFilePatterns": ["go-mixin/go-mixin.yaml"],
+      "matchStrings": [
+        "default:\\s*\"(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)\"\\s*\\n\\s*pattern:[^\\n]*\\n\\s*buildArg:\\s*GO_VERSION"
+      ],
+      "datasourceTemplate": "golang-version",
+      "depNameTemplate": "golang"
+    },
+    {
+      "customType": "regex",
+      "description": "Serena version in kit yaml",
+      "managerFilePatterns": ["ai-tools-mixin/ai-tools-mixin.yaml"],
+      "matchStrings": [
+        "default:\\s*\"(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)\"\\s*\\n\\s*pattern:[^\\n]*\\n\\s*buildArg:\\s*SERENA_VERSION"
+      ],
+      "datasourceTemplate": "pypi",
+      "depNameTemplate": "serena-agent"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions"
+    },
+    {
+      "description": "Group mise tooling updates",
+      "matchManagers": ["mise"],
+      "groupName": "mise tools"
+    },
+    {
+      "description": "Automerge lockfile maintenance",
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "automerge": true
+    }
+  ]
+}

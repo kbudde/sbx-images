@@ -26,11 +26,11 @@ Set up build infrastructure for a repository using [mise](https://mise.jdx.dev).
 
 ## Language detection
 
-| Language | Markers |
-|---|---|
-| Go | `go.mod`, `go.work` |
-| Rust | `Cargo.toml`, `rust-toolchain.toml` |
-| TypeScript | `package.json`, `tsconfig.json` |
+| Language   | Markers                             |
+| ---------- | ----------------------------------- |
+| Go         | `go.mod`, `go.work`                 |
+| Rust       | `Cargo.toml`, `rust-toolchain.toml` |
+| TypeScript | `package.json`, `tsconfig.json`     |
 
 ## Idempotency rules
 
@@ -49,4 +49,3 @@ Default to `latest`. Document that users can pin (e.g. `go = "1.23"`) and that C
 - Nested per-directory configs beyond one level.
 - Languages beyond Go, Rust, TypeScript.
 - Auto-installing toolchains without user approval.
-```

@@ -1,4 +1,5 @@
 # syntax=docker/sandbox-kit:3
+# yaml-language-server: $schema=https://raw.githubusercontent.com/docker/sandbox-kit-spec/main/schema/kit.schema.json
 schemaVersion: "3"
 kind: workload
 
@@ -6,7 +7,7 @@ args:
   version:
     default: "2.2.5"
     pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
-    buildArg: OPENCODE_VERSION  
+    buildArg: OPENCODE_VERSION
   configDir:
     default: "/home/agent/.config/opencode"
     buildArg: OPENCODE_CONFIG_DIRECTORY
@@ -18,17 +19,17 @@ capabilities:
     config:
       runtime:
         allow:
-#          - api.anthropic.com
+          #          - api.anthropic.com
           - opencode.ai
           - models.dev
           - registry.npmjs.org
-#          - pypi.org
-#          - files.pythonhosted.org
+  #          - pypi.org
+  #          - files.pythonhosted.org
   - type: com.docker.sandbox/port@1
     config:
-      name: opencode-web        # optional informational label
-      container: 44444        # REQUIRED, 1..65535
-      transport: tcp         # optional: "tcp" (default) | "udp"
+      name: opencode-web # optional informational label
+      container: 44444 # REQUIRED, 1..65535
+      transport: tcp # optional: "tcp" (default) | "udp"
       # family: ipv4           # optional: "ipv4" (default) | "ipv6" | "dual"
   - type: com.docker.sandbox/credential@1
     config:
@@ -48,7 +49,7 @@ capabilities:
       # directory: "/home/agent/.config/opencode"
       content: |
         # KIT
-        
+
         OpenCode runs as the agent user inside a docker sandbox. Python, uv, npm and jq are available.
         The sandbox is filtering network access. Do not try to workaround the restriction. If the access fails, ask the user to add the domain to the network policy.
 
@@ -80,6 +81,6 @@ capabilities:
             opencode mcp add mcpgw --url $MCP_GATEWAY_URL --header "Authorization=Bearer proxy-managed" --global
             f="$(opencode2 debug config| jq -r '[.[]|select(.type=="directory")][0].path')/limit-providers.json"
             echo '{"enabled_providers": ["opencode-go"]}' > "$f"
-            opencode service set env OPENCODE_API_KEY proxy-managed 
+            opencode service set env OPENCODE_API_KEY proxy-managed
           env: [MCP_GATEWAY_URL]
           user: agent

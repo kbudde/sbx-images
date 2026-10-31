@@ -1,0 +1,4 @@
+# Documented Trivy exceptions.
+# Add one vulnerability ID per line, with a trailing comment explaining why it is ignored.
+# Example:
+# CVE-2024-12345  # not reachable in this image's code path

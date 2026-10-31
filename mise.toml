@@ -1,0 +1,246 @@
+[tools]
+actionlint = "latest"
+hadolint = "latest"
+shellcheck = "latest"
+trivy = "latest"
+syft = "latest"
+shfmt = "latest"
+"aqua:reteps/dockerfmt" = "latest"
+gitleaks = "latest"
+"markdownlint-cli2" = "latest"
+"pypi:zizmor" = { version = "latest", python = "3.14" }
+node = "latest"
+"npm:prettier" = "latest"
+"npm:@commitlint/cli" = "latest"
+"npm:@commitlint/config-conventional" = "latest"
+"git-cliff" = "latest"
+"pypi:NVIDIA/SkillSpector" = { version = "latest", python = "3.14" }
+yamllint = { version = "latest", python = "3.14" }
+uv = "latest"
+lefthook = "latest"
+
+[env]
+REGISTRY = "docker.io"
+IMAGE_NAMESPACE = "kbudde"
+IMAGE_TAG_LATEST = "latest"
+PLATFORMS = "linux/amd64,linux/arm64"
+
+[tasks.lint]
+description = "Lint kits, Dockerfiles, YAML, and shell scripts"
+run = '''
+set -euo pipefail
+echo "==> Discovering kits"
+scripts/discover-kits.sh | while read -r kit; do
+  scripts/check-kit.sh "$kit"
+done
+echo "==> hadolint"
+find . -type f -name '*.dockerfile' -print0 | xargs -0 -r hadolint
+echo "==> yamllint"
+for kit in $(scripts/discover-kits.sh); do
+  yamllint -c .yamllint.yaml "$kit/$kit.yaml"
+done
+echo "==> shellcheck"
+find . -path './.git' -prune -o -path './agent' -prune -o -type f -name '*.sh' -print0 | xargs -0 -r shellcheck
+echo "==> actionlint"
+actionlint
+echo "==> markdownlint"
+markdownlint-cli2 "**/*.md"
+'''
+
+[tasks.fmt]
+description = "Format shell scripts, Dockerfiles and text files"
+run = '''
+set -euo pipefail
+echo "==> shfmt"
+find . -path './.git' -prune -o -path './agent' -prune -o -type f -name '*.sh' -print0 | xargs -0 -r shfmt -w
+echo "==> dockerfmt"
+find . -path './.git' -prune -o -path './agent' -prune -o -type f -name '*.dockerfile' -print0 | xargs -0 -r dockerfmt --write
+echo "==> prettier (write)"
+prettier --write .
+'''
+
+[tasks."fmt-check"]
+description = "Check formatting without writing"
+run = '''
+set -euo pipefail
+echo "==> shfmt"
+find . -path './.git' -prune -o -path './agent' -prune -o -type f -name '*.sh' -print0 | xargs -0 -r shfmt -d
+echo "==> dockerfmt"
+find . -path './.git' -prune -o -path './agent' -prune -o -type f -name '*.dockerfile' -print0 | xargs -0 -r dockerfmt --check
+echo "==> prettier"
+prettier --check .
+'''
+
+[tasks.security]
+description = "Security scan the repository with trivy, skillspector, gitleaks and zizmor"
+depends = [
+  "security:fs",
+  "security:skills",
+  "security:gitleaks",
+  "security:zizmor",
+]
+run = "echo 'All security scans passed'"
+
+[tasks."security:fs"]
+description = "Scan the repository with trivy"
+run = '''
+set -euo pipefail
+trivy fs --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed .
+'''
+
+[tasks."security:skills"]
+description = "Scan agent skills with SkillSpector (static analysis, fails on new findings)"
+run = '''
+set -euo pipefail
+status=0
+scanned=0
+for skill in skills/*/skills/*/SKILL.md skills/*/skills/*.md; do
+  [ -e "$skill" ] || continue
+  case "$skill" in
+    */SKILL.md) name=$(basename "$(dirname "$skill")") ;;
+    *) name=$(basename "$skill" .md) ;;
+  esac
+  echo "--- $name ($skill)"
+  skillspector scan "$skill" --no-llm --baseline .skillspector-baseline.yaml --fail-on-findings || status=1
+  scanned=$((scanned + 1))
+done
+if [ "$scanned" -eq 0 ]; then
+  echo "skillspector: no skills found under skills/" >&2
+  status=1
+fi
+exit "$status"
+'''
+
+[tasks."security:gitleaks"]
+description = "Scan git history for committed secrets with gitleaks"
+run = '''
+set -euo pipefail
+gitleaks detect --source .
+'''
+
+[tasks."security:zizmor"]
+description = "Audit GitHub workflows with zizmor, writing zizmor.sarif"
+run = '''
+set -euo pipefail
+# Parity with the CI step this replaces: findings do not fail the build yet, and
+# zizmor's online audits need GitHub credentials a bare local run may not have.
+# Flipping this to a gate is a one-line change (see .wayfinder/ticket-security-semantics.md).
+zizmor --format sarif . > zizmor.sarif || true
+'''
+
+[tasks.build]
+description = "Build all discovered kits locally"
+run = '''
+set -euo pipefail
+if ! docker buildx inspect kit-builder >/dev/null 2>&1; then
+  docker buildx create --name kit-builder --driver docker-container --bootstrap
+fi
+for kit in $(scripts/discover-kits.sh); do
+  echo "==> Building $kit"
+  docker buildx build --builder kit-builder "$kit" \
+    -f "$kit/$kit.yaml" \
+    --provenance=mode=min \
+    --load \
+    -t "${REGISTRY}/${IMAGE_NAMESPACE}/kit-${kit}:local"
+done
+'''
+
+[tasks."build:kit"]
+description = "Build a single kit (set KIT=<name>)"
+run = '''
+set -euo pipefail
+: "${KIT:?Usage: KIT=<kit> mise run build:kit}"
+if ! docker buildx inspect kit-builder >/dev/null 2>&1; then
+  docker buildx create --name kit-builder --driver docker-container --bootstrap
+fi
+echo "==> Building ${KIT}"
+docker buildx build --builder kit-builder "${KIT}" \
+  -f "${KIT}/${KIT}.yaml" \
+  --provenance=mode=min \
+  --load \
+  -t "${REGISTRY}/${IMAGE_NAMESPACE}/kit-${KIT}:local"
+'''
+
+[tasks."build:version"]
+description = "Resolve next version + release notes for KIT=<name>"
+run = '''
+set -euo pipefail
+: "${KIT:?Usage: KIT=<kit> mise run build:version}"
+kit="${KIT}"
+last_tag=$(git describe --tags --abbrev=0 --match "${kit}-v*" 2>/dev/null || true)
+if [ -z "$last_tag" ]; then
+  last_tag="${kit}-v0.1.0"
+fi
+new_tag=$(git-cliff --bumped-version --include-path "${kit}/**" --tag-pattern "${kit}-v.*" 2>/dev/null || true)
+bump="false"
+version="${last_tag#"${kit}"-v}"
+if [ -n "$new_tag" ] && [ "$new_tag" != "$last_tag" ]; then
+  version="${new_tag#"${kit}"-v}"
+  bump="true"
+fi
+notes_file="${RELEASE_NOTES_FILE:-/tmp/release-notes-${kit}.md}"
+if [ "$bump" = "true" ]; then
+  git-cliff --unreleased --tag "$new_tag" --include-path "${kit}/**" --tag-pattern "${kit}-v.*" > "$notes_file" 2>/dev/null
+else
+  : > "$notes_file"
+fi
+if [ -n "${GITHUB_OUTPUT:-}" ]; then
+  {
+    echo "last=${last_tag}"
+    echo "tag=${new_tag}"
+    echo "version=${version}"
+    echo "bump=${bump}"
+    echo "notes<<GIT_CLIFF_EOF"
+    cat "$notes_file"
+    echo "GIT_CLIFF_EOF"
+  } >> "$GITHUB_OUTPUT"
+fi
+echo "KIT=${kit} LAST=${last_tag} TAG=${new_tag} VERSION=${version} BUMP=${bump} NOTES=${notes_file}"
+'''
+
+[tasks.init]
+description = "Set up the local dev environment (install tools + git hooks)"
+run = '''
+set -euo pipefail
+mise install --locked || echo "warning: mise install --locked failed; see mise.lock/sidecars"
+lefthook install
+echo "Dev environment ready. Run 'mise run check' to verify."
+'''
+
+[tasks.check]
+description = "Run the full local CI gate (Docker-free)"
+depends = ["lint", "fmt-check", "security"]
+run = "echo 'CI gate passed'"
+
+[tasks.ci]
+description = "Alias for check (Docker-free local gate)"
+depends = ["check"]
+run = "echo 'CI gate passed'"
+
+[tasks."docker:build"]
+description = "Build all discovered kits locally (Docker)"
+depends = ["build"]
+run = "echo 'Docker build passed'"
+
+[tasks."docker:scan"]
+description = "Scan a built image with trivy (IMAGE=<ref>)"
+run = '''
+set -euo pipefail
+: "${IMAGE:?Usage: IMAGE=<ref> mise run docker:scan}"
+trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed "${IMAGE}"
+'''
+
+[tasks."docker:sbom"]
+description = "Generate an SPDX-json SBOM for an image (IMAGE=<ref>, SBOM_FILE=...)"
+run = '''
+set -euo pipefail
+: "${IMAGE:?Usage: IMAGE=<ref> mise run docker:sbom}"
+sbom_file="${SBOM_FILE:-sbom.spdx.json}"
+syft scan "${IMAGE}" -o "spdx-json=${sbom_file}"
+echo "SBOM written to ${sbom_file}"
+'''
+
+[tasks."docker:release"]
+description = "Post-build verification: scan + SBOM (IMAGE=<ref>)"
+depends = ["docker:scan", "docker:sbom"]
+run = "echo 'Docker release checks passed'"

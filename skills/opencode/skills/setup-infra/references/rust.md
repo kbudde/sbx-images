@@ -47,4 +47,3 @@ run = "cargo test"
 
 - Commit `Cargo.lock`.
 - Pin toolchain in `rust-toolchain.toml` if needed.
-```

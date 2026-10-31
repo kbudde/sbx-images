@@ -1,4 +1,5 @@
 # syntax=docker/sandbox-kit:3
+# yaml-language-server: $schema=https://raw.githubusercontent.com/docker/sandbox-kit-spec/main/schema/kit.schema.json
 schemaVersion: "3"
 kind: mixin
 displayName: Skills for opencode
@@ -8,10 +9,10 @@ description: Collection of skills and agents for opencode.
 #   - "factory@0.1.0"
 
 capabilities:
-#   - type: com.docker.sandbox/agent-skills@1
-#     config:
-#       path: /home/agent/.agents/skills
-#       mode: readonly
+  #   - type: com.docker.sandbox/agent-skills@1
+  #     config:
+  #       path: /home/agent/.agents/skills
+  #       mode: readonly
 
   # - type: com.docker.sandbox/agent-context@1
   #   config:
@@ -29,5 +30,3 @@ capabilities:
               cp -r /import/skills/* /home/agent/.config/opencode/
           description: Sync settings into the OpenCode config
           user: "1000"
-
-

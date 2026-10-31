@@ -44,4 +44,3 @@ run = "npm test"
 
 - Type-check via `tsc --noEmit`.
 - SAST also via Semgrep at the root for mixed stacks.
-```
