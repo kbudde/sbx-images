@@ -1,0 +1,85 @@
+# syntax=docker/sandbox-kit:3
+schemaVersion: "3"
+kind: workload
+
+args:
+  version:
+    default: "2.2.5"
+    pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
+    buildArg: OPENCODE_VERSION  
+  configDir:
+    default: "/home/agent/.config/opencode"
+    buildArg: OPENCODE_CONFIG_DIRECTORY
+provides: ["opencode2@${{ kit.args.version }}"]
+
+capabilities:
+  - type: com.docker.sandbox/sbx@1
+  - type: com.docker.sandbox/network-policy@1
+    config:
+      runtime:
+        allow:
+#          - api.anthropic.com
+          - opencode.ai
+          - models.dev
+          - registry.npmjs.org
+#          - pypi.org
+#          - files.pythonhosted.org
+  - type: com.docker.sandbox/port@1
+    config:
+      name: opencode-web        # optional informational label
+      container: 44444        # REQUIRED, 1..65535
+      transport: tcp         # optional: "tcp" (default) | "udp"
+      # family: ipv4           # optional: "ipv4" (default) | "ipv6" | "dual"
+  - type: com.docker.sandbox/credential@1
+    config:
+      service: opencode
+      phase: runtime
+      apiKey:
+        name: OPENCODE_API_KEY
+        proxyManaged: true
+        inject:
+          - domain: opencode.ai
+            header: x-api-key
+            format: "%s"
+  - type: com.docker.sandbox/agent-context@1
+    config:
+      filename: AGENTS.md
+      directory: "${{ kit.args.configDir }}"
+      # directory: "/home/agent/.config/opencode"
+      content: |
+        # KIT
+        
+        OpenCode runs as the agent user inside a docker sandbox. Python, uv, npm and jq are available.
+        The sandbox is filtering network access. Do not try to workaround the restriction. If the access fails, ask the user to add the domain to the network policy.
+
+        ## Environment Persistence
+
+        This sandbox has a persistent environment file at `/etc/sandbox-persistent.sh`.
+
+        This file is automatically sourced in all shell contexts:
+        - **Non-interactive shells**: via `BASH_ENV=/etc/sandbox-persistent.sh`
+        - **Login shells**: via `/etc/profile.d/sandbox-persistent.sh`
+        - **Interactive shells**: via `/etc/bash.bashrc` and `~/.bashrc`
+
+        Environment variables stored in this file persist across all bash invocations.
+
+        - Use `echo "export VAR_NAME=value" >> /etc/sandbox-persistent.sh` to add persistent variables
+        - Useful for tool installations (nvm, sdkman, etc.) that modify PATH or environment variables
+
+        ## Critical: Shell Completions Must NOT Be in the Persistent Environment File
+
+        **NEVER add shell completion scripts to `/etc/sandbox-persistent.sh`.**
+
+        Shell completion scripts (like `bash_completion` for NVM, SDKMAN, etc.) **will completely break the bash tool** when sourced via the persistent environment file.
+
+  - type: com.docker.sandbox/lifecycle@1
+    config:
+      install:
+        - command: |
+            set -e
+            opencode mcp add mcpgw --url $MCP_GATEWAY_URL --header "Authorization=Bearer proxy-managed" --global
+            f="$(opencode2 debug config| jq -r '[.[]|select(.type=="directory")][0].path')/limit-providers.json"
+            echo '{"enabled_providers": ["opencode-go"]}' > "$f"
+            opencode service set env OPENCODE_API_KEY proxy-managed 
+          env: [MCP_GATEWAY_URL]
+          user: agent

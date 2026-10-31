@@ -5,7 +5,7 @@ displayName: AI tools mixin
 
 args:
   serena_version:
-    default: "1.7.0"
+    default: "2.1.0"
     pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
     buildArg: SERENA_VERSION
 
@@ -21,6 +21,10 @@ capabilities:
           - pypi.org
           - files.pythonhosted.org
           - registry.npmjs.org
+  - type: com.docker.sandbox/port@1
+    config:
+      name: serena
+      container: 24282
   - type: com.docker.sandbox/agent-context@1
     config:
       contentFile: ./context.md
@@ -28,5 +32,5 @@ capabilities:
   - type: com.docker.sandbox/lifecycle@1
     config:
       install:
-        - command: opencode mcp add serena -- serena start-mcp-server --project-from-cwd --context agent
+        - command: opencode2 mcp add serena -- serena start-mcp-server --project-from-cwd --context agent
           user: "1000"
