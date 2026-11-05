@@ -340,7 +340,7 @@ python = "3.14"
 [[tools."pypi:zizmor"]]
 version = "1.32.0"
 backend = "pypi:zizmor"
-specifiers = ["latest"]
+specifiers = ["1.32.0"]
 uv = { path = ".mise/locks/pypi-zizmor/1.32.0~b17c3710", digest = "sha256:818441e11d1897cbe7a64f283de5336fc6378365f426ff270b9e97cd835c3b20" }
 
 [tools."pypi:zizmor".options]
@@ -623,7 +623,7 @@ provenance = "github-attestations"
 [[tools.yamllint]]
 version = "1.38.0"
 backend = "pypi:yamllint"
-specifiers = ["latest"]
+specifiers = ["1.38.0"]
 uv = { path = ".mise/locks/yamllint/1.38.0~647ee145", digest = "sha256:046d2b05c75efc5d9ac38137831942ac1027e26f43007c3f754c453f19740909" }
 
 [tools.yamllint.options]
