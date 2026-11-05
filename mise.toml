@@ -8,14 +8,14 @@ shfmt = "latest"
 "aqua:reteps/dockerfmt" = "latest"
 gitleaks = "latest"
 "markdownlint-cli2" = "latest"
-"pypi:zizmor" = { version = "latest", python = "3.14" }
+"pypi:zizmor" = { version = "1.32.0", python = "3.14" }
 node = "latest"
 "npm:prettier" = "latest"
 "npm:@commitlint/cli" = "latest"
 "npm:@commitlint/config-conventional" = "latest"
 "git-cliff" = "latest"
 "pypi:NVIDIA/SkillSpector" = { version = "latest", python = "3.14" }
-yamllint = { version = "latest", python = "3.14" }
+yamllint = { version = "1.38.0", python = "3.14" }
 uv = "latest"
 lefthook = "latest"
 
