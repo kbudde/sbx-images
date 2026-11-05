@@ -1,0 +1,5 @@
+.mise/locks/
+.mise/
+node_modules/
+**/*.lock
+zizmor.sarif
