@@ -2,9 +2,6 @@ version = 1
 revision = 5
 requires-python = "==3.14.*"
 
-[options]
-exclude-newer = "2026-11-03T23:19:50.476345456Z"
-
 [[package]]
 name = "mise-pypi-tool-environment"
 version = "0.0.0"
@@ -19,7 +16,7 @@ requires-dist = [{ name = "zizmor", specifier = "==1.32.0" }]
 [[package]]
 name = "zizmor"
 version = "1.32.0"
-source = { registry = "https://pypi.org/simple/" }
+source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/84/c5/9c9d931f6d4d3e55c14467a579dfea567d1bc15e4bb4a2fc6e5fbf931ca2/zizmor-1.32.0.tar.gz", hash = "sha256:f0b664d394576e08605fe8094e8e992056d74b808f30c0c9ca9ed227001dcf67", size = 604400, upload-time = "2026-11-02T23:31:21.6Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/98/19/e5eeae31466ee7fe7919050bca7993ecade4878801cd2174d05b1c2da166/zizmor-1.32.0-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:aa4b4e216321dd5cf202cd79fc83296468f0eed79d850cd65ac8187a6bbc5496", size = 9416965, upload-time = "2026-11-02T23:30:59.361Z" },
