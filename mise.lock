@@ -50,39 +50,39 @@ url_api = "https://api.github.com/repos/rhysd/actionlint/releases/assets/3849249
 provenance = "github-attestations"
 
 [[tools."aqua:reteps/dockerfmt"]]
-version = "0.5.4"
+version = "0.6.0"
 backend = "aqua:reteps/dockerfmt"
 specifiers = ["latest"]
 
 [tools."aqua:reteps/dockerfmt"."platforms.linux-arm64"]
-checksum = "sha256:f8b37047f35a24fe09df7c7341b826acd7f25917f5757fd72c3e8eef17b66e5d"
+checksum = "sha256:801c1a9583a91144c57ff65fc1ddf71bfe446220a1a0f423d3e1444fc8faa767"
 checksum_source = "mise-versions"
-url = "https://github.com/reteps/dockerfmt/releases/download/v0.5.4/dockerfmt-v0.5.4-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/459759353"
+url = "https://github.com/reteps/dockerfmt/releases/download/v0.6.0/dockerfmt-v0.6.0-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/719477701"
 
 [tools."aqua:reteps/dockerfmt"."platforms.linux-arm64-musl"]
-checksum = "sha256:f8b37047f35a24fe09df7c7341b826acd7f25917f5757fd72c3e8eef17b66e5d"
+checksum = "sha256:801c1a9583a91144c57ff65fc1ddf71bfe446220a1a0f423d3e1444fc8faa767"
 checksum_source = "mise-versions"
-url = "https://github.com/reteps/dockerfmt/releases/download/v0.5.4/dockerfmt-v0.5.4-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/459759353"
+url = "https://github.com/reteps/dockerfmt/releases/download/v0.6.0/dockerfmt-v0.6.0-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/719477701"
 
 [tools."aqua:reteps/dockerfmt"."platforms.linux-x64"]
-checksum = "sha256:0a0f5eafd81a76c8a5d04be8d9b5a5fc00c0054a0ea5cc0512377c13c86859bc"
+checksum = "sha256:c77c7fe6c068de8d2132cbc00b3d17e53e8bcd0ae2bb14f0dadf42c8f6206247"
 checksum_source = "mise-versions"
-url = "https://github.com/reteps/dockerfmt/releases/download/v0.5.4/dockerfmt-v0.5.4-linux-amd64.tar.gz"
-url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/459759354"
+url = "https://github.com/reteps/dockerfmt/releases/download/v0.6.0/dockerfmt-v0.6.0-linux-amd64.tar.gz"
+url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/719477886"
 
 [tools."aqua:reteps/dockerfmt"."platforms.linux-x64-musl"]
-checksum = "sha256:0a0f5eafd81a76c8a5d04be8d9b5a5fc00c0054a0ea5cc0512377c13c86859bc"
+checksum = "sha256:c77c7fe6c068de8d2132cbc00b3d17e53e8bcd0ae2bb14f0dadf42c8f6206247"
 checksum_source = "mise-versions"
-url = "https://github.com/reteps/dockerfmt/releases/download/v0.5.4/dockerfmt-v0.5.4-linux-amd64.tar.gz"
-url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/459759354"
+url = "https://github.com/reteps/dockerfmt/releases/download/v0.6.0/dockerfmt-v0.6.0-linux-amd64.tar.gz"
+url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/719477886"
 
 [tools."aqua:reteps/dockerfmt"."platforms.macos-arm64"]
-checksum = "sha256:161b00d14c9b8851e601b665412ae2e9229aa2754e329ce632d60df3d0661c9e"
+checksum = "sha256:847cfb8b3e8b1e81b777196c5018bff6b684e17a5ce64406293ecf88b8da7169"
 checksum_source = "mise-versions"
-url = "https://github.com/reteps/dockerfmt/releases/download/v0.5.4/dockerfmt-v0.5.4-darwin-arm64.tar.gz"
-url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/459759365"
+url = "https://github.com/reteps/dockerfmt/releases/download/v0.6.0/dockerfmt-v0.6.0-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/719477802"
 
 [[tools.git-cliff]]
 version = "2.14.2"
@@ -313,7 +313,7 @@ url = "https://nodejs.org/dist/v26.13.0/node-v26.13.0-win-x64.zip"
 
 [[tools."npm:@commitlint/cli"]]
 version = "21.2.4"
-aube = { path = ".mise/locks/npm-commitlint-cli/21.2.4", digest = "sha256:1463db3478a692c86828b2f1ec455a5e3cf750409598e46bc7428cbcaa2b8c9d" }
+aube = { path = ".mise/locks/npm-commitlint-cli/21.2.4", digest = "sha256:254471f5b757da9fe7ee1ff7f03307689fb8509584f69ae4306b499df364746d" }
 backend = "npm:@commitlint/cli"
 specifiers = ["latest"]
 
@@ -330,7 +330,7 @@ backend = "npm:prettier"
 specifiers = ["latest"]
 
 [[tools."pypi:NVIDIA/SkillSpector"]]
-version = "v2.13.3"
+version = "v2.13.4"
 backend = "pypi:NVIDIA/SkillSpector"
 specifiers = ["latest"]
 
@@ -480,97 +480,97 @@ url = "https://github.com/mvdan/sh/releases/download/v3.14.1/shfmt_v3.14.1_windo
 url_api = "https://api.github.com/repos/mvdan/sh/releases/assets/547320827"
 
 [[tools.syft]]
-version = "1.56.0"
+version = "1.57.0"
 backend = "aqua:anchore/syft"
 specifiers = ["latest"]
 
 [tools.syft."platforms.linux-arm64"]
-checksum = "sha256:ace61b9397ae28189c674ae332d67a8074dafd71e87724dfb8b22412d8253bb5"
-url = "https://github.com/anchore/syft/releases/download/v1.56.0/syft_1.56.0_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/anchore/syft/releases/assets/702477588"
+checksum = "sha256:410cbfa0ae0f63246bc0057843760b1de2833cd23919e025e368fd7681308cdb"
+url = "https://github.com/anchore/syft/releases/download/v1.57.0/syft_1.57.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/anchore/syft/releases/assets/714762067"
 provenance = "cosign"
 
 [tools.syft."platforms.linux-arm64-musl"]
-checksum = "sha256:ace61b9397ae28189c674ae332d67a8074dafd71e87724dfb8b22412d8253bb5"
-url = "https://github.com/anchore/syft/releases/download/v1.56.0/syft_1.56.0_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/anchore/syft/releases/assets/702477588"
+checksum = "sha256:410cbfa0ae0f63246bc0057843760b1de2833cd23919e025e368fd7681308cdb"
+url = "https://github.com/anchore/syft/releases/download/v1.57.0/syft_1.57.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/anchore/syft/releases/assets/714762067"
 provenance = "cosign"
 
 [tools.syft."platforms.linux-x64"]
-checksum = "sha256:1c2493cfcf52d3367d6cb25780d9190c111c2219c34c820574c43e8bae15c528"
-url = "https://github.com/anchore/syft/releases/download/v1.56.0/syft_1.56.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/anchore/syft/releases/assets/702477601"
+checksum = "sha256:9c077a7d43029b3b13e98a8db720661e700c4d58db6352153a06395ae4a2a704"
+url = "https://github.com/anchore/syft/releases/download/v1.57.0/syft_1.57.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/anchore/syft/releases/assets/714762081"
 provenance = "cosign"
 
 [tools.syft."platforms.linux-x64-musl"]
-checksum = "sha256:1c2493cfcf52d3367d6cb25780d9190c111c2219c34c820574c43e8bae15c528"
-url = "https://github.com/anchore/syft/releases/download/v1.56.0/syft_1.56.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/anchore/syft/releases/assets/702477601"
+checksum = "sha256:9c077a7d43029b3b13e98a8db720661e700c4d58db6352153a06395ae4a2a704"
+url = "https://github.com/anchore/syft/releases/download/v1.57.0/syft_1.57.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/anchore/syft/releases/assets/714762081"
 provenance = "cosign"
 
 [tools.syft."platforms.macos-arm64"]
-checksum = "sha256:c19b97a8c175ac7bd8105b8c8240ce740bf078333b12cc62ea49002c1b33e6e0"
-url = "https://github.com/anchore/syft/releases/download/v1.56.0/syft_1.56.0_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/anchore/syft/releases/assets/702477605"
+checksum = "sha256:17012a5a110323bb1069e513a8665f1ae445905c56b4e3f9a9df4f95c5bb6161"
+url = "https://github.com/anchore/syft/releases/download/v1.57.0/syft_1.57.0_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/anchore/syft/releases/assets/714762057"
 provenance = "cosign"
 
 [tools.syft."platforms.macos-x64"]
-checksum = "sha256:ff37fb20e8d072e193cb659ecb932994ba2add772cbf86909c368fb95a630c50"
-url = "https://github.com/anchore/syft/releases/download/v1.56.0/syft_1.56.0_darwin_amd64.tar.gz"
-url_api = "https://api.github.com/repos/anchore/syft/releases/assets/702477611"
+checksum = "sha256:f0e8568a9429ac1c8e4ae9e9c399fede5fcd09e4a7348b47b0532baf1c6500c1"
+url = "https://github.com/anchore/syft/releases/download/v1.57.0/syft_1.57.0_darwin_amd64.tar.gz"
+url_api = "https://api.github.com/repos/anchore/syft/releases/assets/714762070"
 provenance = "cosign"
 
 [tools.syft."platforms.windows-x64"]
-checksum = "sha256:c4cd2846dc0128e29a947bc6f56e1e5ef01707275b0e58590fbe48105198661d"
-url = "https://github.com/anchore/syft/releases/download/v1.56.0/syft_1.56.0_windows_amd64.zip"
-url_api = "https://api.github.com/repos/anchore/syft/releases/assets/702477600"
+checksum = "sha256:06e9663e55f7f38ff966710670fbe0763182c621f7ac2f191bcb209a6dfbd969"
+url = "https://github.com/anchore/syft/releases/download/v1.57.0/syft_1.57.0_windows_amd64.zip"
+url_api = "https://api.github.com/repos/anchore/syft/releases/assets/714762076"
 provenance = "cosign"
 
 [[tools.trivy]]
-version = "0.76.1"
+version = "0.76.2"
 backend = "aqua:aquasecurity/trivy"
 specifiers = ["latest"]
 
 [tools.trivy."platforms.linux-arm64"]
-checksum = "sha256:e174dff2a6dba5e3ae41f8d0537a6324405bd08132497340304c6b20e0f16a1f"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_Linux-ARM64.tar.gz"
-url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/662254480"
+checksum = "sha256:ab9d51f86e6a5fb936f605faff6b593ac51bc378fff4d3e8b9d58358b9c367c3"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.2/trivy_0.76.2_Linux-ARM64.tar.gz"
+url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/713401022"
 provenance = "cosign"
 
 [tools.trivy."platforms.linux-arm64-musl"]
-checksum = "sha256:e174dff2a6dba5e3ae41f8d0537a6324405bd08132497340304c6b20e0f16a1f"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_Linux-ARM64.tar.gz"
-url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/662254480"
+checksum = "sha256:ab9d51f86e6a5fb936f605faff6b593ac51bc378fff4d3e8b9d58358b9c367c3"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.2/trivy_0.76.2_Linux-ARM64.tar.gz"
+url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/713401022"
 provenance = "cosign"
 
 [tools.trivy."platforms.linux-x64"]
-checksum = "sha256:c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_Linux-64bit.tar.gz"
-url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/662254617"
+checksum = "sha256:bc0fc726e017b8927a62b2d3531d7a84ee01769daf5c99ed866dced54089fdbf"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.2/trivy_0.76.2_Linux-64bit.tar.gz"
+url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/713401165"
 provenance = "cosign"
 
 [tools.trivy."platforms.linux-x64-musl"]
-checksum = "sha256:c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_Linux-64bit.tar.gz"
-url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/662254617"
+checksum = "sha256:bc0fc726e017b8927a62b2d3531d7a84ee01769daf5c99ed866dced54089fdbf"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.2/trivy_0.76.2_Linux-64bit.tar.gz"
+url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/713401165"
 provenance = "cosign"
 
 [tools.trivy."platforms.macos-arm64"]
-checksum = "sha256:11a9b6cd2752011b54f01ea4bd0dbfa9f0c41dc6538d5a3f9d23955f471bf4e5"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_macOS-ARM64.tar.gz"
-url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/662254764"
+checksum = "sha256:ae7ea358326960406b703c77b2ac490190797d80b306b5b50c2a27221da0a5b8"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.2/trivy_0.76.2_macOS-ARM64.tar.gz"
+url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/713400755"
 provenance = "cosign"
 
 [tools.trivy."platforms.macos-x64"]
-checksum = "sha256:7aa762eacd582052d053b62dcf972a1ab058abe39a57ccae234ed8894945b6b7"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_macOS-64bit.tar.gz"
-url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/662254481"
+checksum = "sha256:e08bb9ea449ecf66c6bfb03cbb8697c503ff33d35fc585c9747e3eaeb7ed4c7b"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.2/trivy_0.76.2_macOS-64bit.tar.gz"
+url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/713400752"
 provenance = "cosign"
 
 [tools.trivy."platforms.windows-x64"]
-checksum = "sha256:1051f49cb22d5284f43425f72aad9cda63ca12ceb92e7caa06903490c82dc9bf"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_windows-64bit.zip"
-url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/662254788"
+checksum = "sha256:691f737a7e5566a673c3a74dab9160552ec32101e953b659e5c77443d16dddb6"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.76.2/trivy_0.76.2_windows-64bit.zip"
+url_api = "https://api.github.com/repos/aquasecurity/trivy/releases/assets/713401033"
 provenance = "cosign"
 
 [[tools.uv]]
