@@ -1,4 +1,4 @@
-FROM docker/sandbox-templates:opencode AS build
+FROM docker/sandbox-templates:opencode@sha256:7feb9784bc882dbe014888becb65c23e7fb1d1b24169a68d33660fe44476a0b4 AS build
 ARG SERENA_VERSION
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
