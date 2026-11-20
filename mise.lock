@@ -50,39 +50,39 @@ url_api = "https://api.github.com/repos/rhysd/actionlint/releases/assets/3849249
 provenance = "github-attestations"
 
 [[tools."aqua:reteps/dockerfmt"]]
-version = "0.5.4"
+version = "1.0.0"
 backend = "aqua:reteps/dockerfmt"
 specifiers = ["latest"]
 
 [tools."aqua:reteps/dockerfmt"."platforms.linux-arm64"]
-checksum = "sha256:f8b37047f35a24fe09df7c7341b826acd7f25917f5757fd72c3e8eef17b66e5d"
+checksum = "sha256:fb361d10597b998766c72db47c4a70350832860571bb772a8b8cfc780377b7c9"
 checksum_source = "mise-versions"
-url = "https://github.com/reteps/dockerfmt/releases/download/v0.5.4/dockerfmt-v0.5.4-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/459759353"
+url = "https://github.com/reteps/dockerfmt/releases/download/v1.0.0/dockerfmt-v1.0.0-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/746326134"
 
 [tools."aqua:reteps/dockerfmt"."platforms.linux-arm64-musl"]
-checksum = "sha256:f8b37047f35a24fe09df7c7341b826acd7f25917f5757fd72c3e8eef17b66e5d"
+checksum = "sha256:fb361d10597b998766c72db47c4a70350832860571bb772a8b8cfc780377b7c9"
 checksum_source = "mise-versions"
-url = "https://github.com/reteps/dockerfmt/releases/download/v0.5.4/dockerfmt-v0.5.4-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/459759353"
+url = "https://github.com/reteps/dockerfmt/releases/download/v1.0.0/dockerfmt-v1.0.0-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/746326134"
 
 [tools."aqua:reteps/dockerfmt"."platforms.linux-x64"]
-checksum = "sha256:0a0f5eafd81a76c8a5d04be8d9b5a5fc00c0054a0ea5cc0512377c13c86859bc"
+checksum = "sha256:da0cd8bbb3f1b6cdbe0bc16d4e762ffb2351a69eb259d84a7ddc35bcf156e1f7"
 checksum_source = "mise-versions"
-url = "https://github.com/reteps/dockerfmt/releases/download/v0.5.4/dockerfmt-v0.5.4-linux-amd64.tar.gz"
-url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/459759354"
+url = "https://github.com/reteps/dockerfmt/releases/download/v1.0.0/dockerfmt-v1.0.0-linux-amd64.tar.gz"
+url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/746326251"
 
 [tools."aqua:reteps/dockerfmt"."platforms.linux-x64-musl"]
-checksum = "sha256:0a0f5eafd81a76c8a5d04be8d9b5a5fc00c0054a0ea5cc0512377c13c86859bc"
+checksum = "sha256:da0cd8bbb3f1b6cdbe0bc16d4e762ffb2351a69eb259d84a7ddc35bcf156e1f7"
 checksum_source = "mise-versions"
-url = "https://github.com/reteps/dockerfmt/releases/download/v0.5.4/dockerfmt-v0.5.4-linux-amd64.tar.gz"
-url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/459759354"
+url = "https://github.com/reteps/dockerfmt/releases/download/v1.0.0/dockerfmt-v1.0.0-linux-amd64.tar.gz"
+url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/746326251"
 
 [tools."aqua:reteps/dockerfmt"."platforms.macos-arm64"]
-checksum = "sha256:161b00d14c9b8851e601b665412ae2e9229aa2754e329ce632d60df3d0661c9e"
+checksum = "sha256:69239cf26188c206def08f2b9867da63af53336224f58faf05eb4df3562e5467"
 checksum_source = "mise-versions"
-url = "https://github.com/reteps/dockerfmt/releases/download/v0.5.4/dockerfmt-v0.5.4-darwin-arm64.tar.gz"
-url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/459759365"
+url = "https://github.com/reteps/dockerfmt/releases/download/v1.0.0/dockerfmt-v1.0.0-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/reteps/dockerfmt/releases/assets/746326257"
 
 [[tools.git-cliff]]
 version = "2.14.2"
