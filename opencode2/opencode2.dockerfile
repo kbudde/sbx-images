@@ -1,5 +1,5 @@
 # hadolint ignore=DL3007
-FROM docker.io/sbx/opencode-image:latest
+FROM docker.io/sbx/opencode-image:latest@sha256:7b2927a5b648f5e6799a9d8aab5710f34c176292ab28eedb651c02b5ef9c1508
 ARG OPENCODE_VERSION
 
 USER agent
